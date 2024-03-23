@@ -1,10 +1,11 @@
-# Projeto realizado com o objetivo aprofundar os conhecimentos em visão computacional utilizando opencv
-Ele consiste em um algoritmo que detecta apenas as pessoas quando passarem pela porta de entrada/saída. Ele faz a contagem de quantas pessoas entraram, saíram e baseado nisso nos diz quantas pessoas estão dentro do estabelecimento.
+# Projeto realizado com o propósito de aprofundar o conhecimento em visão computacional utilizando Python e a biblioteca OpenCV.
+Ele compreende um algoritmo que identifica exclusivamente as pessoas em um vídeo e realiza a contagem de quantas delas atravessam uma área especificamente demarcada.
 
-## Exemplo do projeto rodando:
+## Exemplo da execução do projeto:
 
 ![GIF](https://github.com/nlemuel/opencv-people-counter/assets/53242511/9135b328-f17b-43ac-aa74-0cad9d54aaa8)
 
+Foi estabelecido um limite de 3 pessoas dentro do estabelecimento. Caso esse limite seja excedido, um alerta é acionado. Após a saída de alguém do estabelecimento, o alerta é removido.
 
 
 
