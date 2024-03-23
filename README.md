@@ -17,7 +17,7 @@ Foi estabelecido um limite de 3 pessoas dentro do estabelecimento. Caso esse lim
 
 - **Python** 
 
-- **Baixe o vídeo para análise: https://mega.nz/file/wsEmmSKD#c3hl49wa37UPLKErehPNhp1CkV_ntf1R1WUeHjaXyRo**
+- **Baixe o vídeo para análise e cole na pasta do projeto: https://mega.nz/file/wsEmmSKD#c3hl49wa37UPLKErehPNhp1CkV_ntf1R1WUeHjaXyRo**
 
 ## 🗔 Executando a aplicação
 
@@ -61,4 +61,4 @@ pip install ultralytics
 python main.py
 ```
 
-✔️ **Feito! O script irá iniciar e o vídeo será iniciado para detectar e contar os carros.** <br/>
+✔️ **Feito! O script irá iniciar e o vídeo será iniciado para análise.** <br/>
