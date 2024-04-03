@@ -33,15 +33,23 @@ class_list = data.split("\n")
 
 count=0
 tracker = Tracker()
-list = []
-bbox_id = tracker.update(list)
+lista_id = []
+bbox_id = tracker.update(lista_id)
 entering = {}
 ppl_entering = set()
 
 exiting = {}
 ppl_exiting = set()
 
-timestamps = {}
+timestamps = {
+    1: {'enter': datetime.now(), 'exit': datetime.now()},
+    2: {'enter': datetime.now(), 'exit': datetime.now()}
+}
+
+data_entrada = {}
+hora_entrada = {}
+data_saida = {}
+hora_saida = {}
 
 while True:    
     ret,frame = cap.read()
@@ -54,8 +62,7 @@ while True:
     results=model.predict(frame)
     a=results[0].boxes.data
     px=pd.DataFrame(a).astype("float")
-    list=[]
-    list.clear()
+    lista_id.clear()
              
     for index,row in px.iterrows():
         x1=int(row[0])
@@ -66,8 +73,8 @@ while True:
         c=class_list[d]
         
         if 'person' in c:
-           list.append([x1, y1, x2, y2])
-    bbox_id = tracker.update(list)
+           lista_id.append([x1, y1, x2, y2])
+    bbox_id = tracker.update(lista_id)
     for i, bbox in enumerate(bbox_id):
         x3, y3, x4, y4, id = bbox
         results = cv2.pointPolygonTest(np.array(area2, np.int32), (x4, y4), False)
@@ -123,16 +130,36 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-data = []
+
+ids = []
+datas_entrada = []
+horas_entrada = []
+datas_saida = []
+horas_saida = []
+
+# Iterando sobre os timestamps para extrair a data e hora de entrada e saída
 for id, times in timestamps.items():
-    data.append({
-        'ID': id,
-        'Entrada': times.get('enter'),
-        'Saída': times.get('exit')  # Usando get() para evitar KeyError se 'exit' não existir
-    })
+    ids.append(id)
+    if 'enter' in times:
+        datas_entrada.append(times['enter'].date())
+        horas_entrada.append(times['enter'].time())
+    else:
+        datas_entrada.append(None)
+        horas_entrada.append(None)
+    if 'exit' in times:
+        datas_saida.append(times['exit'].date())
+        horas_saida.append(times['exit'].time())
+    else:
+        datas_saida.append(None)
+        horas_saida.append(None)
 
 # Criando o DataFrame
-df = pd.DataFrame(data)
-
+df = pd.DataFrame({
+    'ID': ids,
+    'Data de entrada': datas_entrada,
+    'Hora de entrada': horas_entrada,
+    'Data de saída': datas_saida,
+    'Hora de saída': horas_saida
+})
 # Exibindo o DataFrame
 print(df)
