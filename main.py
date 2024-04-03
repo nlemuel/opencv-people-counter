@@ -1,6 +1,8 @@
 import cv2
 import pandas as pd
 import numpy as np
+
+from datetime import datetime
 from ultralytics import YOLO
 
 from tracker import *
@@ -27,7 +29,7 @@ cap=cv2.VideoCapture('peoplecount1.mp4')
 my_file = open("coco.txt", "r")
 data = my_file.read()
 class_list = data.split("\n") 
-#print(class_list)
+
 
 count=0
 tracker = Tracker()
@@ -38,6 +40,8 @@ ppl_entering = set()
 
 exiting = {}
 ppl_exiting = set()
+
+timestamps = {}
 
 while True:    
     ret,frame = cap.read()
@@ -77,6 +81,7 @@ while True:
                 cv2.circle(frame, (x4, y4), 4, (255, 0, 255), -1)
                 cv2.putText(frame, str(id), (x3, y3), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
                 ppl_entering.add(id)
+                timestamps[id] = {'enter': datetime.now()} #registra a entrada
       
         
         results_exiting = cv2.pointPolygonTest(np.array(area1, np.int32), (x4, y4), False)
@@ -92,6 +97,7 @@ while True:
                 cv2.circle(frame, (x4, y4), 4, (255, 0, 255), -1)
                 cv2.putText(frame, str(id), (x3, y3), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
                 ppl_exiting.add(id)
+                timestamps[id] = {'exit': datetime.now()} #registra a saída
 
     
     cv2.polylines(frame,[np.array(area1,np.int32)],True,(255,0,0),2)
@@ -117,3 +123,16 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+data = []
+for id, times in timestamps.items():
+    data.append({
+        'ID': id,
+        'Entrada': times.get('enter'),
+        'Saída': times.get('exit')  # Usando get() para evitar KeyError se 'exit' não existir
+    })
+
+# Criando o DataFrame
+df = pd.DataFrame(data)
+
+# Exibindo o DataFrame
+print(df)
