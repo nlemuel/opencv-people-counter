@@ -4,14 +4,17 @@ import numpy as np
 from ultralytics import YOLO
 
 from tracker import *
+from create_df import create_dataframe
 
 
 model=YOLO('yolov8s.pt')
 
 
-area1=[(312,388),(289,390),(474,469),(497,462)]
+# area1=[(312,388),(289,390),(474,469),(497,462)]
 
-area2=[(279,392),(250,397),(423,477),(454,469)]
+# area2=[(279,392),(250,397),(423,477),(454,469)]
+area1 = [(467,313),(528, 295), (558,300), (511,327)] 
+area2 = [(530, 331),(570,303),(624,312), (579, 336)]
 def RGB(event, x, y, flags, param):
     if event == cv2.EVENT_MOUSEMOVE :  
         colorsBGR = [x, y]
@@ -23,9 +26,7 @@ cv2.setMouseCallback('RGB', RGB)
 
 
 
-cap = cv2.VideoCapture("http://192.168.15.3:8080/video")
-
-
+cap = cv2.VideoCapture("http://192.168.15.6:8080/video")
 if not cap.isOpened():
     print("Erro ao abrir a câmera")
     exit()
@@ -45,6 +46,7 @@ ppl_entering = set()
 
 exiting = {}
 ppl_exiting = set()
+timestamps = {}
 
 while True:    
     ret,frame = cap.read()
@@ -122,6 +124,7 @@ while True:
 
     if cv2.waitKey(1) == ord("q"):
         break
-
+df = create_dataframe(timestamps)
+print(df)
 cap.release()
 cv2.destroyAllWindows()
